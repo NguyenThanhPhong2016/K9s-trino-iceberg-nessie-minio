@@ -1,0 +1,13 @@
+dags:
+  gitSync:
+    enabled: true
+    repo: git@github.com:NguyenThanhPhong2016/DAG_file.git
+    branch: main
+    subPath: ""
+  persistence:
+    enabled: false
+
+images:
+  airflow:
+    repository: phong192016/push-example2
+    tag: latest
