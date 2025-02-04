@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trino-configmap
+data:
+  config.properties: |
+    coordinator=true
+    node-scheduler.include-coordinator=true
+    http-server.http.port=2000
+    discovery.uri=http://trino-coordinator-service:8083
+  jvm.config: |
+    -server
+    -Xmx16G
+    -XX:InitialRAMPercentage=80
+    -XX:MaxRAMPercentage=80
+    -XX:G1HeapRegionSize=32M
+    -XX:+ExplicitGCInvokesConcurrent
+    -XX:+ExitOnOutOfMemoryError
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:-OmitStackTraceInFastThrow
+    -XX:ReservedCodeCacheSize=512M
+    -XX:PerMethodRecompilationCutoff=10000
+    -XX:PerBytecodeRecompilationCutoff=10000
+    -Djdk.attach.allowAttachSelf=true
+    -Djdk.nio.maxCachedBufferSize=2000000
+    -Dfile.encoding=UTF-8
+    # Allow loading dynamic agent used by JOL
+    -XX:+EnableDynamicAgentLoading
+  node.properties: |
+    node.environment=production
+    node.id=ffffffff-ffff-ffff-ffff-ffffffffffff
+    node.data-dir=/var/trino/data
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trino-catalog
+data:
+  iceberg.properties: |
+    connector.name=iceberg
+    iceberg.catalog.type=nessie
+    iceberg.nessie-catalog.uri=http://192.168.1.17:31002/api/v2
+
+    s3.endpoint=http://192.168.1.17:31000
+    s3.region=minio
+    s3.aws-access-key=2v4JnpPz6SdmVYIqIZHk
+    s3.aws-secret-key=NRvsY4bUjAyevVQbwKIus7YGNH7chIZPZ2QZW67o
+
+    iceberg.nessie-catalog.ref=main
+    iceberg.nessie-catalog.default-warehouse-dir=s3://warehouse1
+    fs.native-s3.enabled=true
+  oracle.properties: |
+    connector.name=oracle
+    connection-url=jdbc:oracle:thin:@192.168.1.18:30915/FREEPDB1
+    connection-user=RVNIT
+    connection-password=Raffles#2024

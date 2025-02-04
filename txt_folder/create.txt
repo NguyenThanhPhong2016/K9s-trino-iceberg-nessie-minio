@@ -1,0 +1,23 @@
+
+
+
+# create 2 pvc: trino and nessie 
+#create pvc
+kubectl apply -f .\create_all\pvc.yaml
+
+# create a deployment, a API, a Web UI 
+#create minio 
+kubectl apply -f .\create_all\minio.yaml 
+
+# create a deployment, a Web UI 
+# create nessie 
+kubectl apply -f .\create_all\nessie.yaml 
+
+# create 2 configmap, one catalog, one config for trino 
+# create configmap 
+kubectl apply -f .\create_all\config_map.yaml 
+
+# create trino 
+kubectl apply -f .\create_all\trino.yaml 
+
+

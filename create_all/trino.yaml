@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trino-coordinator
+spec:
+  replicas: 1
+  selector:   
+    matchLabels:
+      app: trino1
+  template:
+    metadata:
+      labels:
+        app: trino1
+    spec:
+      containers:
+      - name: trino-coordinator
+        image: trinodb/trino:latest
+        volumeMounts:
+        - name: trino-data-pvc 
+          mountPath: /var/trino/data
+        - name: trino-configmap
+          mountPath: /etc/trino
+        - name: trino-catalog
+          mountPath: /etc/trino/catalog
+      volumes:
+      - name: trino-configmap
+        configMap:
+          name: trino-configmap
+      - name: trino-catalog
+        configMap:
+          name: trino-catalog
+      - name: trino-data-pvc     # Tên volume
+        persistentVolumeClaim:
+          claimName: trino-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trino-coordinator-service
+spec:
+  selector:
+    app: trino1
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 2000
+      nodePort: 31003
+  type: NodePort
+

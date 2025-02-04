@@ -1,0 +1,52 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: minio
+  name: minio
+spec:
+  containers:
+  - name: minio
+    image: minio/minio:latest
+    command:
+    - /bin/bash
+    - -c
+    args: 
+    - minio server /data --console-address :9090
+    volumeMounts:    
+    - mountPath: /data
+      name: minio-pvc
+  volumes:
+    - name: minio-pvc     # Tên volume
+      persistentVolumeClaim:
+        claimName: minio-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  type: NodePort   # Thay đổi loại Service thành NodePort
+  selector:
+    app: minio
+  ports:
+    - protocol: TCP
+      port: 9090          # Cổng mà Service lắng nghe
+      targetPort: 9000    # Cổng bên trong Pod MinIO
+      nodePort: 31000     # Cổng NodePort (phải nằm trong khoảng 30000-32767)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service-webweb
+spec:
+  type: NodePort   # Thay đổi loại Service thành NodePort
+  selector:
+    app: minio
+  ports:
+    - protocol: TCP
+      port: 9090          # Cổng mà Service lắng nghe
+      targetPort: 9090    # Cổng bên trong Pod MinIO
+      nodePort: 31001    # Cổng NodePort (phải nằm trong khoảng 30000-32767)

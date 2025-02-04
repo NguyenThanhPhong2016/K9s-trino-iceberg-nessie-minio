@@ -1,0 +1,17 @@
+
+
+# delete all configmap
+kubectl delete configmap trino-catalog;
+kubectl delete configmap trino-config;
+kubectl delete svc trino-coordinator-service;
+kubectl delete deployment trino-coordinator;
+
+kubectl delete configmap --all
+
+#delete all svc 
+
+# delete trino 
+kubectl delete svc trino-coordinator-service;
+kubectl delete deployment trino-coordinator;
+
+

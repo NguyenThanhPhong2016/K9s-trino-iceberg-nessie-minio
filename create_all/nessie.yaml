@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nessie-inmetadata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nessie
+  template:
+    metadata:
+      labels:
+        app: nessie
+    spec:
+      containers:
+        - name: nessie
+          image: projectnessie/nessie:latest
+          ports:
+            - containerPort: 19120
+          env:
+            - name: QUARKUS_HTTP_PORT
+              value: "19301"
+            - name: QUARKUS_LOG_LEVEL
+              value: "INFO"
+          volumeMounts:
+            - name: nessie-pvc
+              mountPath: /data
+      volumes:
+        - name: nessie-pvc
+          persistentVolumeClaim:
+            claimName: nessie-data-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nessie-service
+spec:
+  type: NodePort
+  selector:
+    app: nessie
+  ports:
+    - protocol: TCP
+      port: 19300       # Cổng trong cluster
+      targetPort: 19301  # Cổng trong container
+      nodePort: 31002    # Cổng để truy cập từ bên ngoài (tuỳ chỉnh)
