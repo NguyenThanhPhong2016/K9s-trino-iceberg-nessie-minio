@@ -1,9 +1,9 @@
 dags:
   gitSync:
     enabled: true
-    repo: git@github.com:NguyenThanhPhong2016/DAG_file.git
+    repo: https://github.com/NguyenThanhPhong2016/K9s-trino-iceberg-nessie-minio.git
     branch: main
-    subPath: ""
+    subPath: "DAG_Airflow"
   persistence:
     enabled: false
 

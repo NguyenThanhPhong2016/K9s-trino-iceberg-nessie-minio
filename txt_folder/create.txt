@@ -20,4 +20,7 @@ kubectl apply -f .\create_all\config_map.yaml
 # create trino 
 kubectl apply -f .\create_all\trino.yaml 
 
+#  create airflow 
+helm upgrade --install airflow apache-airflow/airflow -f .\create_all\airflow-values.yaml
+
 
