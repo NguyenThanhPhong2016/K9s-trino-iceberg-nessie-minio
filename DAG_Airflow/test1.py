@@ -36,12 +36,16 @@ with DAG(
     # )
     run_bash_command = BashOperator(
         task_id='run_bash_command',
-        bash_command='minio --version'
+        bash_command='pip3 show minio'
     )
     run_bash_command1 = BashOperator(
         task_id='run_bash_command1',
         bash_command='python --version'
     )
-    run_bash_command >> run_bash_command1
+    run_bash_command2 = BashOperator(
+        task_id='run_bash_command2',
+        bash_command='pip3 show trino'
+    )
+    run_bash_command >> run_bash_command1 >> run_bash_command2 
 
     
