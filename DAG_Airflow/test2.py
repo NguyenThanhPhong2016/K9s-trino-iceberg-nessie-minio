@@ -9,7 +9,7 @@ with DAG(
 ) as dag1:
     # Tạo task chạy container từ Docker Hub
     dockerhub_k8s = KubernetesPodOperator(
-        namespace="default",
+        namespace="phong-movedata-database-minio",
         image="python:3.9",  # Image từ Docker Hub (public)
         cmds=["python", "-c"],
         arguments=["print('Hello from Docker Hub')"],
