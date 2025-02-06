@@ -1,6 +1,9 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.utils.dates import days_ago
+from airflow.providers.http.sensors.http import HttpSensor
+
+
 
 default_args = {
     "owner": "airflow",
@@ -15,7 +18,14 @@ with DAG(
     schedule_interval=None,
     catchup=False,
 ) as dag:
-
+    check_website = HttpSensor(
+        task_id="check_website",
+        endpoint="http://192.168.1.17:31003",
+        method="GET",
+        response_check=lambda response: response.status_code == 200,
+        poke_interval=10,
+        timeout=300,
+    )
     trino_query = KubernetesPodOperator(
         image="trinodb/trino:latest",  # Sử dụng container Trino CLI
         cmds=["trino"],  # Chạy CLI của Trino
@@ -28,5 +38,5 @@ with DAG(
         task_id="trino_query_task",
         get_logs=True,
     )
-    trino_query
+    check_website >> trino_query
 
