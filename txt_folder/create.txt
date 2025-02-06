@@ -25,3 +25,6 @@ helm upgrade --install airflow apache-airflow/airflow -f .\create_all\airflow-va
 
 # them web cua airflow 
 kubectl port-forward svc/airflow-webserver 8080:8080
+
+# dung git bash, kiem tra cac image trong pod. 
+kubectl describe pod airflow-worker-0 | grep -i image
