@@ -20,11 +20,12 @@ with DAG(
 ) as dag:
     check_website = HttpSensor(
         task_id="check_website",
-        endpoint="http://192.168.1.17:31003",
+        http_conn_id="http_connect",  # 🟢 Sử dụng Connection ID từ Airflow UI
+        endpoint="",  # 🟢 Để trống nếu kiểm tra trực tiếp host
         method="GET",
         response_check=lambda response: response.status_code == 200,
         poke_interval=10,
-        timeout=300,
+        timeout=25,
     )
     trino_query = KubernetesPodOperator(
         image="trinodb/trino:latest",  # Sử dụng container Trino CLI
