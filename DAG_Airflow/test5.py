@@ -29,7 +29,7 @@ my_task()
 
 # Tạo DAG
 with DAG(
-    dag_id="test3",
+    dag_id="test5",
     start_date=datetime(2023, 1, 1),
     schedule_interval=None,  # Chạy thủ công
     catchup=False,
