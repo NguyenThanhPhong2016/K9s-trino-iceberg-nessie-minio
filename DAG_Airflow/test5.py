@@ -1,52 +1,32 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
-from datetime import datetime
+from airflow.utils.dates import days_ago
 
-# Sử dụng image có sẵn SciPy từ Docker Hub
-IMAGE_NAME = "jupyter/scipy-notebook"  # Image chứa SciPy, NumPy
+default_args = {
+    "owner": "airflow",
+    "depends_on_past": False,
+    "start_date": days_ago(1),
+    "retries": 1,
+}
 
-PYTHON_SCRIPT = """
-import numpy as np
-from scipy.optimize import minimize
-from scipy.linalg import solve
-
-def objective_function(x):
-    return (x - 3) ** 5 + x + 2
-
-def my_task():
-    A = np.array([[3, 2], [1, 4]])  # Ma trận hệ số
-    b = np.array([5, 6])  # Vector hằng số
-
-    x = solve(A, b)  # Giải hệ phương trình Ax = b
-    print("Nghiệm của hệ phương trình tuyến tính:", x)
-
-    result = minimize(objective_function, x0=0)  # Bắt đầu từ x0 = 0
-    print("Giá trị x tối ưu:", result.x)
-    print("Giá trị nhỏ nhất của hàm:", result.fun)
-
-my_task()
-"""
-
-# Tạo DAG
 with DAG(
-    dag_id="test5",
-    start_date=datetime(2023, 1, 1),
-    schedule_interval=None,  # Chạy thủ công
+    "trino_query_pod",
+    default_args=default_args,
+    schedule_interval=None,
     catchup=False,
-) as dag1:
+) as dag:
 
-    # Tạo task chạy container từ Docker Hub với image có SciPy
-    dockerhub_k8s = KubernetesPodOperator(
-        namespace="phong-movedata-database-minio",
-        image=IMAGE_NAME,  # Image có SciPy
-        cmds=["python", "-c"],
-        arguments=[PYTHON_SCRIPT],  # Chạy script Python trong container
-        labels={"app": "airflow"},
-        name="airflow-dockerhub-pod-them",
-        task_id="task-dockerhub",
-        on_finish_action="delete_pod",
-        in_cluster=True,
+    trino_query = KubernetesPodOperator(
+        image="trinodb/trino:latest",  # Sử dụng container Trino CLI
+        cmds=["trino"],  # Chạy CLI của Trino
+        arguments=[
+            "--server", "http://192.168.1.17:31003",  # Địa chỉ Trino Server
+            "--catalog", "iceberg",  # Catalog cần query (VD: Hive, Iceberg)
+            "--execute", "SELECT * FROM iceberg.my_schema1.table1",  # Truy vấn SQL
+        ],
+        name="trino-query-task",
+        task_id="trino_query_task",
         get_logs=True,
     )
+    trino_query
 
-    dockerhub_k8s  # Gán task vào DAG

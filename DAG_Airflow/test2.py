@@ -16,7 +16,7 @@ with DAG(
         labels={"app": "airflow"},
         name="airflow-dockerhub-pod",
         on_finish_action="delete_pod",
-        in_cluster=True,
+        in_cluster=False,
         task_id="task-dockerhub",
         get_logs=True,
         dag=dag1

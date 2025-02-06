@@ -11,3 +11,5 @@ images:
   airflow:
     repository: phong192016/push-example2
     tag: latest
+extraPipPackages:
+  - "apache-airflow-providers-trino"
