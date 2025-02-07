@@ -20,7 +20,6 @@ dag = DAG(
 
 # Tạo Task sử dụng KubernetesPodOperator để chạy dbt
 dbt_run_task = KubernetesPodOperator(
-    namespace="phong-movedata-database-minio",  # Đặt namespace trên Kubernetes
     image="phong192016/my-dbt-project:v1",  # Image dbt từ Docker Hub
     cmds=["dbt", "run"],  # Chạy lệnh dbt run
     name="dbt-run-pod",
