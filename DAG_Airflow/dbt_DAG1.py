@@ -1,14 +1,14 @@
 from datetime import timedelta
 from airflow import DAG
-from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': days_ago(1),
     'retries': 3,  # Số lần retry tối đa
-    'retry_delay': timedelta(minutes=5),  # Khoảng thời gian giữa các lần retry
+    'retry_delay': timedelta(minutes=1),  # Khoảng thời gian giữa các lần retry
 }
 
 # Khởi tạo DAG
