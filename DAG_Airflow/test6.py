@@ -6,7 +6,7 @@ from airflow.operators.python_operator import PythonOperator
 
 def process_response(**kwargs):
     ti = kwargs["ti"]
-    response_data = ti.xcom_pull(task_ids="get_post")  # 🟢 Lấy dữ liệu từ XCom
+    response_data = ti.xcom_pull(task_ids="get_post")  #  Lấy dữ liệu từ XCom
     print("📌 Response từ API:", response_data)
 
 
