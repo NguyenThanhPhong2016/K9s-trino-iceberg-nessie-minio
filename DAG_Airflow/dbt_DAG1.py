@@ -13,7 +13,7 @@ default_args = {
 
 # Khởi tạo DAG
 dag = DAG(
-    "dbt_kubernetes_dag1",
+    "dbt_kubernetes_dag2",
     default_args=default_args,
     schedule_interval="@daily",  # Chạy DAG mỗi ngày
     catchup=False,
