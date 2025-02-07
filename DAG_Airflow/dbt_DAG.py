@@ -18,10 +18,11 @@ dag = DAG(
     catchup=False,
 )
 
-# Tạo Task sử dụng KubernetesPodOperator để chạy dbt
-dbt_run_task = KubernetesPodOperator(
+# Tạo Task sử dụng KubernetesPodOperator để chạy 
+dbt_run_task = KubernetesPodOperator(  
     image="phong192016/my-dbt-project:v1",  # Image dbt từ Docker Hub
     cmds=["dbt", "run"],  # Chạy lệnh dbt run
+    arguments=["--profiles-dir", "."],
     name="dbt-run-pod",
     task_id="dbt_run",
     get_logs=True,  # Lấy logs từ Kubernetes để hiển thị trong Airflow
