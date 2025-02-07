@@ -20,9 +20,9 @@ dag = DAG(
 
 
 dbt_run_task = KubernetesPodOperator(  
-    image="phong192016/my-dbt-project:v4",  # Image dbt từ Docker Hub
+    image="phong192016/my-dbt-project:v5",  # Image dbt từ Docker Hub
     cmds=["dbt"], 
-    arguments=["run", "--profiles-dir", ".", "--project-dir", ".", "-s", "models/example/*"],  # Thêm đầy đủ các arguments
+    arguments=["run", "--profiles-dir", "./project", "--project-dir", "./project", "-s", "project/models/example/*"],  # Thêm đầy đủ các arguments
     name="dbt-run-pod",
     task_id="dbt_run",
     get_logs=True,  # Lấy logs từ Kubernetes để hiển thị trong Airflow
