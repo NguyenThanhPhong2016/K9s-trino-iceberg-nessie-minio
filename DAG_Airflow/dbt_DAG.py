@@ -20,7 +20,7 @@ dag = DAG(
 
 # Tạo Task sử dụng KubernetesPodOperator để chạy 
 dbt_run_task = KubernetesPodOperator(  
-    image="phong192016/my-dbt-project:v1",  # Image dbt từ Docker Hub
+    image="phong192016/my-dbt-project:v2",  # Image dbt từ Docker Hub
     cmds=["dbt", "run"],  # Chạy lệnh dbt run
     arguments=["--profiles-dir", "."],
     name="dbt-run-pod",
