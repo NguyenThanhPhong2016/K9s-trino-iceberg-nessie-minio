@@ -22,7 +22,7 @@ dag = DAG(
 
 dbt_run_task = KubernetesPodOperator(  
     image="phong192016/my-dbt-project:v5",  # Image dbt từ Docker Hub
-    cmds=["ls"], 
+    cmds=["ls project_dbt"], 
     name="dbt-run-pod",
     task_id="dbt_run",
     get_logs=True,  # Lấy logs từ Kubernetes để hiển thị trong Airflow
