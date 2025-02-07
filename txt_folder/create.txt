@@ -31,4 +31,5 @@ kubectl port-forward svc/airflow-webserver 8080:8080
 kubectl describe pod airflow-worker-0 | grep -i image
 kubectl exec -it airflow-worker-0 -- pip list
 
+kubectl delete pod dbt-run-pod-6ldtmda5
 
