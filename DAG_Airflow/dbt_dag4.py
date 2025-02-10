@@ -27,7 +27,7 @@ dbt_run_task = KubernetesPodOperator(
     name="dbt-run-pod",
     task_id="dbt_run",
     get_logs=True,  # Lấy logs từ Kubernetes để hiển thị trong Airflow
-    is_delete_operator_pod=True,
+    is_delete_operator_pod=False,
     in_cluster=True,  # Nếu Airflow chạy trong Kubernetes, đặt là True
     dag=dag,
 )
