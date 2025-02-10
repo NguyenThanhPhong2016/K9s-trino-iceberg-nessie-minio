@@ -33,3 +33,12 @@ kubectl exec -it airflow-worker-0 -- pip list
 
 kubectl delete pod dbt-run-pod-6ldtmda5
 
+kubectl exec -it dbt-run-pod-5avw13fp -- ls -l /dbt_project/macros/
+
+
+kubectl run debug-dbt --rm -it --image=phong192016/my-dbt-project:v8 -- /bin/bash
+
+dbt debug --profiles-dir . --project-dir . -s ./models/example/*
+
+
+kubectl delete pod dbt-run-pod-stna389e 

@@ -21,7 +21,7 @@ dag = DAG(
 
 
 dbt_run_task = KubernetesPodOperator(  
-    image="phong192016/my-dbt-project:v8",  # Image dbt từ Docker Hub
+    image="phong192016/my-dbt-project:v10",  # Image dbt từ Docker Hub
     cmds=["bash", "-c"],
     arguments=["cd /dbt && dbt run --profiles-dir . --project-dir . -s ./models/example/*"],
     name="dbt-run-pod",
